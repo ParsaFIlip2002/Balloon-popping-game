@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Balloon_popping_game"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="700" Width="450" ResizeMode="CanMinimize" >
+    <Canvas Name="MyCanvas" Focusable="True" MouseLeftButtonDown="PopBalloons" Background="White">
+
+        <Label FontSize="24" Name="scoreText" Content="Score: 0 " FontWeight="ExtraBold" Canvas.Left="10" Canvas.Top="417"> </Label>
         
-    </Grid>
+        
+    </Canvas>
+   
 </Window>
