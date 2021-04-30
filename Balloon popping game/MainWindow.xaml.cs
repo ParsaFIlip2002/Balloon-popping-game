@@ -23,6 +23,8 @@ namespace Balloon_popping_game
         public MainWindow()
         {
             InitializeComponent();
+            break;
+            int Hej1 = 1;
         }
     }
 }
