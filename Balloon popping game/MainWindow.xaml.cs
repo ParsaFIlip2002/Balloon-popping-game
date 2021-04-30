@@ -45,6 +45,7 @@ namespace Balloon_popping_game
         public MainWindow()
         {
             InitializeComponent();
+
             gameTimer.Tick += GameEnigne;
             gameTimer.Interval = TimeSpan.FromMilliseconds(20);
 
@@ -57,6 +58,9 @@ namespace Balloon_popping_game
         private void GameEnigne(object sender, EventArgs e)
         {
             
+
+         
+
         }
 
         private void PopBalloons(object sender, MouseButtonEventArgs e)
