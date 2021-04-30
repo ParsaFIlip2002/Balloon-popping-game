@@ -63,7 +63,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="hej.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -94,6 +93,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Files\background-Image.jpg" />
+    <Resource Include="Files\balloon1.png" />
+    <Resource Include="Files\balloon2.png" />
+    <Resource Include="Files\balloon3.png" />
+    <Resource Include="Files\balloon4.png" />
+    <Resource Include="Files\balloon5.png" />
+    <Content Include="Files\pop_sound.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

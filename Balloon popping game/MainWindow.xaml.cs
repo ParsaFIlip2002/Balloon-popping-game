@@ -52,24 +52,83 @@ namespace Balloon_popping_game
             backgroundImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/files/background.image.jpg"));
             MyCanvas.Background = backgroundImage;
 
-            RestartGame();            
+            RestartGame();
         }
 
         private void GameEnigne(object sender, EventArgs e)
         {
-            
 
-         
+            scoreText.Content = "Score" + score;
 
+            intervals -= 10;
+
+            if (intervals < 1)
+            {
+                ImageBrush balloonImage = new ImageBrush();
+
+                balloonSkins += 1;
+                if (balloonSkins > 5)
+                {
+                    balloonSkins = 1;
+                }
+                switch (balloonSkins)
+                {
+                    case 1:
+                        balloonImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/files/balloon1.png"));
+                        break;
+                    case 2:
+                        balloonImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/files/balloon2.png"));
+                        break;
+                    case 3:
+                        balloonImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/files/balloon3.png"));
+                        break;
+                    case 4:
+                        balloonImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/files/balloon4.png"));
+                        break;
+                    case 5:
+                        balloonImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/files/balloon5.png"));
+                        break;
+                }
+                Rectangle newBalloon = new Rectangle
+                {
+                    Tag = "ballooon",
+                    Height = 50,
+                    Width = 50,
+                    Fill = balloonImage,
+                };
+                Canvas.SetLeft(newBalloon, rand.Next(50, 400));
+                Canvas.SetTop(newBalloon, 600);
+
+                MyCanvas.Children.Add(newBalloon);
+                intervals = rand.Next(90, 150);
+            }
+
+            foreach (var x in MyCanvas.Children.OfType<Rectangle>())
+
+            {
+                if ((string)x.Tag == "balloon")
+                {
+                    i = rand.Next(-5, 5);
+                    Canvas.SetTop(x, Canvas.GetTop(x) - speed);
+                    Canvas.SetLeft(x, Canvas.GetTop(x) - (i * speed));
+
+                }
+            }
         }
 
         private void PopBalloons(object sender, MouseButtonEventArgs e)
         {
 
-     
+
         }
-        private void StartGame ()
+        private void StartGame()
         {
+            gameTimer.Start();
+            missedBalloons = 0;
+            score = 0;
+            intervals = 90; ;
+            gameIsActive = true;
+            speed = 3;
 
         }
         private void RestartGame()
@@ -79,10 +138,14 @@ namespace Balloon_popping_game
             {
                 itemRemover.Add(x);
             }
-            foreach ( Rectangle y in itemRemover)
+            foreach (Rectangle y in itemRemover)
             {
-                MyCanvas.Children.Remove(y);            }
+                MyCanvas.Children.Remove(y); 
         }
+            itemRemover.Clear();
 
+            StartGame();
+
+        }
     }
 }
