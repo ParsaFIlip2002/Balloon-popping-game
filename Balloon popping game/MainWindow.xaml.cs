@@ -72,21 +72,21 @@ namespace Balloon_popping_game
         {
 
           
-            scoreText.Content = "Score" + score;
+            scoreText.Content = "Score" + score; // skapar en text som det står Score på och en variable som heter score
 
-            intervals -= 10;
+            intervals -= 10; 
 
-            if (intervals < 1)
+            if (intervals < 1) // körs när intervals är högre än 1 
             {
                 ImageBrush balloonImage = new ImageBrush();
 
-                balloonSkins += 1;
+                balloonSkins += 1; 
 
-                if (balloonSkins > 5)
+                if (balloonSkins > 5) // om ballonSkins blir mer än 5 så stoppas if satsen
                 {
                     balloonSkins = 1;
                 }
-                switch (balloonSkins)
+                switch (balloonSkins) // swithc case för att välja färg på ballongen 
                 {
                     case 1:
                         balloonImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/files/balloon1.png"));
@@ -104,14 +104,14 @@ namespace Balloon_popping_game
                         balloonImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/files/balloon5.png"));
                         break;
                 }
-                Rectangle newBalloon = new Rectangle
+                Rectangle newBalloon = new Rectangle // en rectangle som en bild kan läggas in
                 {
                     Tag = "balloon",
                     Height = 50,
                     Width = 50,
-                    Fill = balloonImage,
+                    Fill = balloonImage, // fyller Rectangle med en bild som valts i switch casen
                 };
-                Canvas.SetLeft(newBalloon, rand.Next(50, 400));
+                Canvas.SetLeft(newBalloon, rand.Next(50, 400)); // Rectangeln kommer att sättas på ett random nummer mellan 50-400
                 Canvas.SetTop(newBalloon, 600);
 
                 MyCanvas.Children.Add(newBalloon);
