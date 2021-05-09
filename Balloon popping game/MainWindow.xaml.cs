@@ -25,7 +25,7 @@ namespace Balloon_popping_game
         DispatcherTimer gameTimer = new DispatcherTimer();
 
         int speed = 3;
-        int intervals = 90;
+        int intervals = 90; // hur ofta en balloong skapas
         Random rand = new Random();
 
         List<Rectangle> itemRemover = new List<Rectangle>();
@@ -33,6 +33,7 @@ namespace Balloon_popping_game
         ImageBrush backgroundImage = new ImageBrush();
 
         int balloonSkins;
+        int i;
         int missedBalloons;
 
         bool gameIsActive;
@@ -41,6 +42,12 @@ namespace Balloon_popping_game
 
 
         MediaPlayer player = new MediaPlayer();
+        /// <summary>
+        /// 
+        /// 
+        /// 
+        /// 
+        /// </summary>
 
         public MainWindow()
         {
@@ -49,15 +56,22 @@ namespace Balloon_popping_game
             gameTimer.Tick += GameEnigne;
             gameTimer.Interval = TimeSpan.FromMilliseconds(20);
 
-            backgroundImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/files/background.image.jpg"));
+            backgroundImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/files/background-Image.jpg"));
             MyCanvas.Background = backgroundImage;
 
             RestartGame();
         }
-
+        /// <summary>
+        /// Metoden GameEnigne skapar balloonger och med hjälp av if satser så bestämms det hur ofta dom ska produceras. 
+        /// Metoden 
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GameEnigne(object sender, EventArgs e)
         {
 
+          
             scoreText.Content = "Score" + score;
 
             intervals -= 10;
@@ -67,6 +81,7 @@ namespace Balloon_popping_game
                 ImageBrush balloonImage = new ImageBrush();
 
                 balloonSkins += 1;
+
                 if (balloonSkins > 5)
                 {
                     balloonSkins = 1;
@@ -91,7 +106,7 @@ namespace Balloon_popping_game
                 }
                 Rectangle newBalloon = new Rectangle
                 {
-                    Tag = "ballooon",
+                    Tag = "balloon",
                     Height = 50,
                     Width = 50,
                     Fill = balloonImage,
@@ -108,25 +123,67 @@ namespace Balloon_popping_game
             {
                 if ((string)x.Tag == "balloon")
                 {
+                   
                     i = rand.Next(-5, 5);
                     Canvas.SetTop(x, Canvas.GetTop(x) - speed);
-                    Canvas.SetLeft(x, Canvas.GetTop(x) - (i * speed));
+                    Canvas.SetLeft(x, Canvas.GetLeft(x) - (i * -1));
 
                 }
+
+                if (Canvas.GetTop(x) < 20)
+                {
+                    itemRemover.Add(x);
+                    missedBalloons += 1;
+                }
             }
+            foreach (Rectangle y in itemRemover)
+            {
+                MyCanvas.Children.Remove(y);
+            }
+
+            if (missedBalloons > 10)
+            {
+                gameIsActive = false;
+
+                gameTimer.Stop();
+                MessageBox.Show("Game over! You missed 10 balloons" + Environment.NewLine + "Click to play again");
+
+                RestartGame();
+            }
+
+            if (score > 3)
+            {
+                speed = 7;
+            }
+
         }
 
         private void PopBalloons(object sender, MouseButtonEventArgs e)
         {
+            if (gameIsActive)
+            {
 
+                if (e.OriginalSource is Rectangle)
+                {
+                    Rectangle activeRec = (Rectangle)e.OriginalSource;
+
+                    player.Open(new Uri("../../files/pop_sound.mp3", UriKind.RelativeOrAbsolute));
+                    player.Play();
+
+                    MyCanvas.Children.Remove(activeRec);
+
+                    score += 1;
+                }
+            }
 
         }
         private void StartGame()
         {
             gameTimer.Start();
+
             missedBalloons = 0;
             score = 0;
-            intervals = 90; ;
+            intervals = 90; 
             gameIsActive = true;
             speed = 3;
 
