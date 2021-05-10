@@ -62,8 +62,10 @@ namespace Balloon_popping_game
             RestartGame();
         }
         /// <summary>
-        /// Metoden GameEnigne skapar balloonger och med hjälp av if satser så bestämms det hur ofta dom ska produceras. 
-        /// Metoden 
+        /// Metoden GameEnigne skapar en rectangle och då skickas bilden på balloonsen till rectangeln och med hjälp av if satser så bestämms det hur ofta dom ska produceras. 
+        /// Metoden bestämmer också vart balloonsen ska produceras 
+        /// Metoden håller också koll på hur många man missat och om man missar 10 st så förlorar man 
+        /// Speed ökar om man får mer än tre Score
         /// 
         /// </summary>
         /// <param name="sender"></param>
@@ -82,7 +84,7 @@ namespace Balloon_popping_game
 
                 balloonSkins += 1; 
 
-                if (balloonSkins > 5) // om ballonSkins blir mer än 5 så stoppas if satsen
+                if (balloonSkins > 5) // om ballonSkins blir mer än 5 så körs inte if satsen
                 {
                     balloonSkins = 1;
                 }
@@ -114,34 +116,35 @@ namespace Balloon_popping_game
                 Canvas.SetLeft(newBalloon, rand.Next(50, 400)); // Rectangeln kommer att sättas på ett random nummer mellan 50-400
                 Canvas.SetTop(newBalloon, 600);
 
-                MyCanvas.Children.Add(newBalloon);
+                MyCanvas.Children.Add(newBalloon); // Lägger till objektet
+
                 intervals = rand.Next(90, 150);
             }
 
-            foreach (var x in MyCanvas.Children.OfType<Rectangle>())
+            foreach (var x in MyCanvas.Children.OfType<Rectangle>()) 
 
             {
-                if ((string)x.Tag == "balloon")
+                if ((string)x.Tag == "balloon") //"balloon" är en tag, letar efter Rectangle som har tagen balloon
                 {
                    
-                    i = rand.Next(-5, 5);
-                    Canvas.SetTop(x, Canvas.GetTop(x) - speed);
+                    i = rand.Next(-5, 5); // generera ett nummer mellan talen
+                    Canvas.SetTop(x, Canvas.GetTop(x) - speed); 
                     Canvas.SetLeft(x, Canvas.GetLeft(x) - (i * -1));
 
                 }
 
-                if (Canvas.GetTop(x) < 20)
+                if (Canvas.GetTop(x) < 20) // om GetTop mlir mer än 20 så körs if satsen
                 {
-                    itemRemover.Add(x);
-                    missedBalloons += 1;
+                    itemRemover.Add(x); // lägger till Canvas i itemRemover
+                    missedBalloons += 1; // plussar 1 i missedBalloons
                 }
             }
             foreach (Rectangle y in itemRemover)
             {
-                MyCanvas.Children.Remove(y);
+                MyCanvas.Children.Remove(y); // tar bort Rectanglen som finns i itemRemover
             }
 
-            if (missedBalloons > 10)
+            if (missedBalloons > 10) // om man missar 10 balloons så körs denna if satsen, en text skickas ut att du förlora och restar sedan spelet
             {
                 gameIsActive = false;
 
@@ -151,23 +154,28 @@ namespace Balloon_popping_game
                 RestartGame();
             }
 
-            if (score > 3)
+            if (score > 3) // om score blir mer än 3 så ökas speed 
             {
                 speed = 7;
             }
 
         }
-
+        /// <summary>
+        ///  Spelar upp ett mp3 ljud när man klickar på en ballong och adderar ett poäng i score när det sker. 
+        ///  
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PopBalloons(object sender, MouseButtonEventArgs e)
         {
             if (gameIsActive)
             {
 
-                if (e.OriginalSource is Rectangle)
+                if (e.OriginalSource is Rectangle) // körs när man klickar på en Rectangle(Balloon)
                 {
-                    Rectangle activeRec = (Rectangle)e.OriginalSource;
+                    Rectangle activeRec = (Rectangle)e.OriginalSource; // Lokal Rectangle
 
-                    player.Open(new Uri("../../files/pop_sound.mp3", UriKind.RelativeOrAbsolute));
+                    player.Open(new Uri("../../files/pop_sound.mp3", UriKind.RelativeOrAbsolute)); 
                     player.Play();
 
                     MyCanvas.Children.Remove(activeRec);
@@ -177,6 +185,10 @@ namespace Balloon_popping_game
             }
 
         }
+
+        /// <summary>
+        /// Startar spelet och resetar alla värden
+        /// </summary>
         private void StartGame()
         {
             gameTimer.Start();
@@ -188,6 +200,10 @@ namespace Balloon_popping_game
             speed = 3;
 
         }
+
+        /// <summary>
+        /// Tar bort alla REctanglar och kör sedan metoden StartGame
+        /// </summary>
         private void RestartGame()
         {
 
