@@ -22,42 +22,43 @@ namespace Balloon_popping_game
     public partial class MainWindow : Window
     {
 
-        DispatcherTimer gameTimer = new DispatcherTimer();
+        DispatcherTimer gameTimer = new DispatcherTimer(); //timer
 
-        int speed = 3;
+        int speed = 3; //hastigheten på ballonger uppåt
         int intervals = 90; // hur ofta en balloong skapas
-        Random rand = new Random();
+        Random rand = new Random(); //Slumptal
 
-        List<Rectangle> itemRemover = new List<Rectangle>();
+        List<Rectangle> itemRemover = new List<Rectangle>(); //Ballonger som åkt förbi toppen kommer att lagras i itemRemover
 
-        ImageBrush backgroundImage = new ImageBrush();
+        ImageBrush backgroundImage = new ImageBrush(); //Importerar backgrund bild
 
-        int balloonSkins;
-        int i;
-        int missedBalloons;
+        int balloonSkins; // deklarerar
+        int i; // deklarerar
+        int missedBalloons;// deklarerar
 
-        bool gameIsActive;
+        bool gameIsActive;// deklarerar
 
-        int score;
+        int score;// deklarerar
 
 
         MediaPlayer player = new MediaPlayer();
+
+
         /// <summary>
+        /// GameEnigne körs varje gång intervalet har uppnåts på gameTimer, intervalet är 20
         /// 
-        /// 
-        /// 
-        /// 
+        /// importerar en bild om används som backgrundsbild
         /// </summary>
 
         public MainWindow()
         {
             InitializeComponent();
 
-            gameTimer.Tick += GameEnigne;
-            gameTimer.Interval = TimeSpan.FromMilliseconds(20);
+            gameTimer.Tick += GameEnigne; // körs varje gång intervalet har uppnåts på gameTimer
+            gameTimer.Interval = TimeSpan.FromMilliseconds(20); //intervalet är 20
 
-            backgroundImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/files/background-Image.jpg"));
-            MyCanvas.Background = backgroundImage;
+            backgroundImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/files/background-Image.jpg")); //navigerar vart bilden är 
+            MyCanvas.Background = backgroundImage; // använder den som backgrundsbild
 
             RestartGame();
         }
@@ -80,9 +81,9 @@ namespace Balloon_popping_game
 
             if (intervals < 1) // körs när intervals är högre än 1 
             {
-                ImageBrush balloonImage = new ImageBrush();
+                ImageBrush balloonImage = new ImageBrush(); // ny Imagebrush skapas
 
-                balloonSkins += 1; 
+                balloonSkins += 1; // lägger till 1 på inten
 
                 if (balloonSkins > 5) // om ballonSkins blir mer än 5 så körs inte if satsen
                 {
@@ -91,7 +92,7 @@ namespace Balloon_popping_game
                 switch (balloonSkins) // swithc case för att välja färg på ballongen 
                 {
                     case 1:
-                        balloonImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/files/balloon1.png"));
+                        balloonImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/files/balloon1.png")); //importerar bilden
                         break;
                     case 2:
                         balloonImage.ImageSource = new BitmapImage(new Uri("pack://application:,,,/files/balloon2.png"));
@@ -113,23 +114,23 @@ namespace Balloon_popping_game
                     Width = 50,
                     Fill = balloonImage, // fyller Rectangle med en bild som valts i switch casen
                 };
-                Canvas.SetLeft(newBalloon, rand.Next(50, 400)); // Rectangeln kommer att sättas på ett random nummer mellan 50-400
-                Canvas.SetTop(newBalloon, 600);
+                Canvas.SetLeft(newBalloon, rand.Next(50, 400)); // newBalloon kommer att sättas på ett random nummer mellan 50-400
+                Canvas.SetTop(newBalloon, 600); // //max värdet på NewBalloon är 600 (Lodrätt)
 
                 MyCanvas.Children.Add(newBalloon); // Lägger till objektet
-
-                intervals = rand.Next(90, 150);
+                 
+                intervals = rand.Next(90, 150); //Resetar intervalen 
             }
 
-            foreach (var x in MyCanvas.Children.OfType<Rectangle>()) 
+            foreach (var x in MyCanvas.Children.OfType<Rectangle>()) //kollar om  Rectangle finns i MyCanvas
 
             {
                 if ((string)x.Tag == "balloon") //"balloon" är en tag, letar efter Rectangle som har tagen balloon
                 {
                    
                     i = rand.Next(-5, 5); // generera ett nummer mellan talen
-                    Canvas.SetTop(x, Canvas.GetTop(x) - speed); 
-                    Canvas.SetLeft(x, Canvas.GetLeft(x) - (i * -1));
+                    Canvas.SetTop(x, Canvas.GetTop(x) - speed); // positionering på ballongerna 
+                    Canvas.SetLeft(x, Canvas.GetLeft(x) - (i * -1)); //positionering på ballongerna
 
                 }
 
@@ -139,16 +140,16 @@ namespace Balloon_popping_game
                     missedBalloons += 1; // plussar 1 i missedBalloons
                 }
             }
-            foreach (Rectangle y in itemRemover)
+            foreach (Rectangle y in itemRemover) // kollar om
             {
                 MyCanvas.Children.Remove(y); // tar bort Rectanglen som finns i itemRemover
             }
 
             if (missedBalloons > 10) // om man missar 10 balloons så körs denna if satsen, en text skickas ut att du förlora och restar sedan spelet
             {
-                gameIsActive = false;
+                gameIsActive = false; 
 
-                gameTimer.Stop();
+                gameTimer.Stop(); // stoppar timern
                 MessageBox.Show("Game over! You missed 10 balloons" + Environment.NewLine + "Click to play again");
 
                 RestartGame();
@@ -168,19 +169,19 @@ namespace Balloon_popping_game
         /// <param name="e"></param>
         private void PopBalloons(object sender, MouseButtonEventArgs e)
         {
-            if (gameIsActive)
+            if (gameIsActive) // när speleet spelas så körs denna 
             {
 
                 if (e.OriginalSource is Rectangle) // körs när man klickar på en Rectangle(Balloon)
                 {
                     Rectangle activeRec = (Rectangle)e.OriginalSource; // Lokal Rectangle
 
-                    player.Open(new Uri("../../files/pop_sound.mp3", UriKind.RelativeOrAbsolute)); 
+                    player.Open(new Uri("../../files/pop_sound.mp3", UriKind.RelativeOrAbsolute)); //importerar mp3 
                     player.Play();
 
-                    MyCanvas.Children.Remove(activeRec);
+                    MyCanvas.Children.Remove(activeRec); // tar bort den lokala Rectanglen 
 
-                    score += 1;
+                    score += 1; // adderar med 1 i score
                 }
             }
 
@@ -191,7 +192,7 @@ namespace Balloon_popping_game
         /// </summary>
         private void StartGame()
         {
-            gameTimer.Start();
+            gameTimer.Start(); // startar timer
 
             missedBalloons = 0;
             score = 0;
@@ -207,17 +208,17 @@ namespace Balloon_popping_game
         private void RestartGame()
         {
 
-            foreach (var x in MyCanvas.Children.OfType<Rectangle>())
+            foreach (var x in MyCanvas.Children.OfType<Rectangle>()) // kollar om  Rectangle finns i MyCanvas 
             {
-                itemRemover.Add(x);
+                itemRemover.Add(x); // om  Rectangle finns i MyCanvas så läggs den till i itemRemover
             }
-            foreach (Rectangle y in itemRemover)
+            foreach (Rectangle y in itemRemover) // kollar om  Rectangle finns i itemRemover 
             {
-                MyCanvas.Children.Remove(y); 
-        }
-            itemRemover.Clear();
+                MyCanvas.Children.Remove(y);  // Tar bort om Rectangle finns i itemRemover 
+            }
+            itemRemover.Clear(); //Resetar 
 
-            StartGame();
+            StartGame(); // kör metoden StartGame
 
         }
     }
