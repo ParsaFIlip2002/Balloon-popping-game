@@ -188,7 +188,7 @@ namespace Balloon_popping_game
         }
 
         /// <summary>
-        /// Startar spelet och resetar alla värden
+        /// Startar spelet med default värden.
         /// </summary>
         private void StartGame()
         {
@@ -203,12 +203,12 @@ namespace Balloon_popping_game
         }
 
         /// <summary>
-        /// Tar bort alla REctanglar och kör sedan metoden StartGame
+        /// Tar bort alla Rectanglar och kör sedan metoden StartGame
         /// </summary>
         private void RestartGame()
         {
 
-            foreach (var x in MyCanvas.Children.OfType<Rectangle>()) // kollar om  Rectangle finns i MyCanvas 
+            foreach (var x in MyCanvas.Children.OfType<Rectangle>()) // Loopar igenom children och lägger till i listan om Rectangle finns.  
             {
                 itemRemover.Add(x); // om  Rectangle finns i MyCanvas så läggs den till i itemRemover
             }
@@ -216,7 +216,7 @@ namespace Balloon_popping_game
             {
                 MyCanvas.Children.Remove(y);  // Tar bort om Rectangle finns i itemRemover 
             }
-            itemRemover.Clear(); //Resetar 
+            itemRemover.Clear(); //Clearar allt som finns i listan
 
             StartGame(); // kör metoden StartGame
 
